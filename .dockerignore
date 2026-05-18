@@ -1,0 +1,14 @@
+venv/
+.venv/
+__pycache__/
+.git/
+.github/
+.ipynb_checkpoints/
+.env
+.env.*
+.vscode/
+.idea/
+*.md
+!README.md
+Stock_Market_Prediction_Model_Creation_v2.ipynb
+Stock Predictions Model_final.keras
