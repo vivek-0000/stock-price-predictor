@@ -1,72 +1,122 @@
-# Stock Market Predictor (LSTM)
+# 📈 Stock Market Predictor
 
-Streamlit app for stock price charts and LSTM forecasts. Supports **US** and **Indian (NSE/BSE)** markets via Yahoo Finance.
+> Dual LSTM stock price prediction with TensorFlow & PyTorch, served via FastAPI, visualized in React.js, deployed on AWS.
 
-## Local run
+**Live Demo:** http://vivek-stockml-frontend.s3-website-ap-southeast-2.amazonaws.com
 
+**API Docs:** http://3.106.166.28:8000/docs
+
+---
+
+## 🏗️ Architecture
+
+```
+React.js (AWS S3)
+      ↓  HTTP
+FastAPI Backend (AWS EC2)
+      ↓
+TensorFlow LSTM  +  PyTorch LSTM
+      ↓
+Yahoo Finance Data (yfinance)
+```
+
+---
+
+## 📊 Model Performance
+
+| Metric | TensorFlow | PyTorch |
+|--------|-----------|---------|
+| MAE    | $5.63     | $7.04   |
+| RMSE   | $7.12     | $10.04  |
+| MAPE   | 4.27%     | 4.82%   |
+| R²     | 0.9400    | 0.8824  |
+
+Trained on GOOG · 2012–2024 · 4 features: Close, Volume, RSI, MACD · Lookback: 150 days
+
+---
+
+## 🗂️ Project Structure
+
+```
+Stock_Market_Prediction_ML/
+├── backend/                         ← FastAPI REST API
+│   ├── main.py                      ← App entry point
+│   ├── core/
+│   │   ├── model_manager.py         ← Loads TF + PyTorch at startup
+│   │   ├── features.py              ← RSI, MACD, ATR, BB engineering
+│   │   └── inference.py             ← Inference logic for both models
+│   ├── routers/
+│   │   ├── predict.py               ← GET /predict, /forecast
+│   │   ├── indicators.py            ← GET /indicators
+│   │   ├── compare.py               ← GET /compare
+│   │   └── health.py                ← GET /health
+│   └── requirements.txt
+│
+├── frontend/                        ← React.js dashboard
+│   ├── src/
+│   │   ├── App.jsx                  ← Router + global ticker state
+│   │   ├── services/api.js          ← Axios API calls
+│   │   ├── components/              ← Navbar, UI components
+│   │   └── pages/                   ← Dashboard, Predict, Compare, Indicators
+│   └── package.json
+│
+└── notebooks/
+    ├── Stock_Market_Prediction_Model_Creation_v2.ipynb   ← TF training
+    └── Stock_Predictions_PyTorch_Phase1.ipynb            ← PyTorch training
+```
+
+---
+
+## 🚀 Run Locally
+
+### Backend
 ```bash
-python -m venv venv
-venv\Scripts\activate          # Windows
+cd backend
 pip install -r requirements.txt
-streamlit run app.py
+# Place model files in backend/:
+#   Stock Predictions Model.keras
+#   Stock_Predictions_PyTorch_scripted.pt
+#   pytorch_scalers.pkl
+python main.py
+# → http://localhost:8000/docs
 ```
 
-Train or retrain the model in `Stock_Market_Prediction_Model_Creation_v2.ipynb`, then keep `Stock Predictions Model.keras` in this folder.
-
-## Deploy to GitHub
-
-1. Create a new repository on [GitHub](https://github.com/new) (e.g. `Stock_Market_Prediction_ML`).
-2. In this project folder:
-
+### Frontend
 ```bash
-git init
-git add .
-git commit -m "Initial commit: Streamlit stock predictor"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git push -u origin main
+cd frontend
+npm install
+npm start
+# → http://localhost:3000
 ```
 
-**Important:** `Stock Predictions Model.keras` (~2 MB) must be committed so Railway can serve predictions.
+---
 
-## Deploy to Railway
+## 🌐 API Endpoints
 
-### Option A — From GitHub (recommended)
+| Endpoint | Description |
+|----------|-------------|
+| `GET /health` | Model load status |
+| `GET /predict?ticker=GOOG&model=tensorflow` | Historical prediction |
+| `GET /forecast?ticker=GOOG&model=both` | Next-day forecast |
+| `GET /indicators?ticker=GOOG&start=2023-01-01` | RSI, MACD, BB, ATR |
+| `GET /compare?ticker=GOOG` | TF vs PyTorch metrics |
 
-1. Push the repo to GitHub (steps above).
-2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**.
-3. Select your repository. Railway detects the `Dockerfile` via `railway.toml`.
-4. Open the service → **Settings** → **Networking** → **Generate Domain**.
-5. Optional **Variables** (Settings → Variables):
+---
 
-| Variable     | Example                         | Purpose              |
-|-------------|----------------------------------|----------------------|
-| `MARKET`    | `IN`                             | Default market       |
-| `MODEL_PATH`| `Stock Predictions Model.keras`  | Model file path      |
+## ☁️ AWS Deployment
 
-6. Wait for the build (TensorFlow install can take several minutes). Open the public URL.
+| Service | Usage |
+|---------|-------|
+| EC2 | FastAPI backend |
+| S3 | React frontend static hosting |
+| S3 | Model file storage |
 
-### Option B — Railway CLI
+---
 
-```bash
-npm i -g @railway/cli
-railway login
-railway init
-railway up
-```
+## 🛠️ Tech Stack
 
-## Project layout
+`Python` `TensorFlow` `PyTorch` `LSTM` `FastAPI` `React.js` `Recharts` `AWS EC2` `AWS S3` `yfinance` `scikit-learn`
 
-| File | Purpose |
-|------|---------|
-| `app.py` | Streamlit UI |
-| `Stock Predictions Model.keras` | Trained LSTM model |
-| `Dockerfile` | Production container (Railway) |
-| `railway.toml` | Railway build/deploy config |
-| `requirements.txt` | Python dependencies |
+---
 
-## Notes
-
-- Use **at least 2 GB RAM** on Railway for TensorFlow + Streamlit.
-- Retrain the notebook on the same stock you analyze in the app for best results.
-- This app is for education only — not financial advice.
+> ⚠️ For educational purposes only — not financial advice.
