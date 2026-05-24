@@ -26,3 +26,13 @@ Thumbs.db
 
 # Optional backup models (keep main model in repo for Railway)
 Stock Predictions Model_final.keras
+# Model files (too large for GitHub)
+*.keras
+*.pt
+*.pkl
+
+# React
+node_modules/
+frontend/node_modules/
+build/
+frontend/build/

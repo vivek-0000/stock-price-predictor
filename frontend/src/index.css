@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:        #080c10;
+  --bg2:       #0d1117;
+  --bg3:       #111820;
+  --border:    #1e2d3d;
+  --border2:   #263545;
+  --text:      #cdd9e5;
+  --text2:     #768390;
+  --text3:     #444c56;
+  --accent:    #58a6ff;
+  --accent2:   #1f6feb;
+  --green:     #3fb950;
+  --green2:    #238636;
+  --red:       #f85149;
+  --red2:      #da3633;
+  --yellow:    #d29922;
+  --purple:    #bc8cff;
+  --orange:    #e3b341;
+  --glow:      rgba(88,166,255,0.15);
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* Animations */
+@keyframes fadeIn   { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+@keyframes scanline { 0% { transform:translateY(-100%); } 100% { transform:translateY(100vh); } }
+@keyframes ticker   { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+
+.fade-in { animation: fadeIn 0.4s ease both; }
+
+/* Utility */
+.mono { font-family: var(--font-mono); }
+.positive { color: var(--green); }
+.negative { color: var(--red); }
+.muted    { color: var(--text2); }
