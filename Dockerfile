@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py start.sh ./
 COPY ".streamlit" ".streamlit/"
-COPY "Stock Predictions Model.keras" "Stock Predictions Model.keras"
+COPY ["Stock Predictions Model.keras", "Stock Predictions Model.keras"]
 
 RUN chmod +x start.sh
 
